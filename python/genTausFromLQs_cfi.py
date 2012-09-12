@@ -5,7 +5,7 @@ genTausFromLQs = cms.EDProducer('GenMotherParticleSkimmer',
   MotherPDGIds        = cms.vint32( 42 ),
   MotherPDGIdsVetoed  = cms.vint32( 6, 24 ),                               
   DaughterPDGIds      = cms.vint32( 15  ),                            
-  DaughterPDGStatuses = cms.vint32( 1,2 ),
+  DaughterPDGStatuses = cms.vint32( 2 ),
   StoreFinalStateOnly = cms.bool ( True )                                 
 )
 
@@ -14,7 +14,7 @@ genTausFromLQTops = cms.EDProducer('GenMotherParticleSkimmer',
   MotherPDGIds        = cms.vint32( 42, 6, 24 ),
   MotherPDGIdsVetoed  = cms.vint32( ), 
   DaughterPDGIds      = cms.vint32( 15  ),                            
-  DaughterPDGStatuses = cms.vint32( 1,2 ),
+  DaughterPDGStatuses = cms.vint32( 2 ),
   StoreFinalStateOnly = cms.bool ( True )                                 
 )
 
