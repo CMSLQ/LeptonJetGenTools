@@ -76,6 +76,7 @@ void GenMotherParticleSkimmer::produce(edm::Event& iEvent, const edm::EventSetup
 	int status = it -> status () ;
 	int pdgid  = it -> pdgId  () ; 
 
+
 	//------------------------------------------------------------------------
 	// Is this one of the particle IDs that we want?
 	//------------------------------------------------------------------------
@@ -94,6 +95,7 @@ void GenMotherParticleSkimmer::produce(edm::Event& iEvent, const edm::EventSetup
 	std::vector<int>::const_iterator interesting_status_iterator = std::find (m_daughterPDGStatuses.begin(), 
 										  m_daughterPDGStatuses.end(), 
 										  status );
+
 	
 	if ( interesting_status_iterator == m_daughterPDGStatuses.end() ) continue;
 
@@ -147,7 +149,7 @@ void GenMotherParticleSkimmer::produce(edm::Event& iEvent, const edm::EventSetup
 	  
 	  std::vector<int>::const_iterator interesting_mother_iterator = std::find ( m_motherPDGIds.begin(),
 	  									     m_motherPDGIds.end(),
-	  									     abs (mother_pdgid) );
+	  									     abs(mother_pdgid) );
 	  
 	  foundInterestingMother = interesting_mother_iterator != m_motherPDGIds.end();
 	  
@@ -156,15 +158,15 @@ void GenMotherParticleSkimmer::produce(edm::Event& iEvent, const edm::EventSetup
 	  
 	  std::vector<int>::const_iterator vetoed_mother_iterator = std::find ( m_motherPDGIdsVetoed.begin(),
 										m_motherPDGIdsVetoed.end(),
-										abs (mother_pdgid) );
+										abs(mother_pdgid) );
 	  
+	  if(!foundVetoedMother) foundVetoedMother = vetoed_mother_iterator != m_motherPDGIdsVetoed.end();
 
-
-	  foundVetoedMother = vetoed_mother_iterator != m_motherPDGIdsVetoed.end();
 
 	  // add mother PDG to chain of mothers
 
-	  motherChain.push_back ( mother_pdgid );
+	  motherChain.push_back ( abs(mother_pdgid) );
+
 
 	  // Look at the next mother, and iterate the number of tries
 	  mother = mother -> mother(0);
@@ -180,27 +182,13 @@ void GenMotherParticleSkimmer::produce(edm::Event& iEvent, const edm::EventSetup
 	if ( !foundInterestingMother ) continue;
 	
 	//------------------------------------------------------------------------
-	// DEBUG: print mother chain 
-	//------------------------------------------------------------------------
-	
-	/*
-	int nMothersInChain = motherChain.size();
-	if ( nMothersInChain != 0 ) { 
-	  std::cout << "Particle ID = " << pdgid << ", mother chain = ";
-	  for (int iMother = 0; iMother < nMothersInChain; ++iMother) { 
-	    std::cout << motherChain[iMother] << " ";
-	  }
-	  std::cout << std::endl;
-	}
-	*/
-
-	//------------------------------------------------------------------------
 	// Did we get ALL of the required mothers?
 	//------------------------------------------------------------------------
 
 	int nMotherPDGIds = m_motherPDGIds.size();
 	bool found_all_requested_mother_pdgs = true;
 	std::vector<int>::iterator motherChainIterator;
+
 
 	for (int iMotherPDG = 0; iMotherPDG < nMotherPDGIds; ++iMotherPDG){
 	  int requested_mother_pdgid = m_motherPDGIds[iMotherPDG];
@@ -215,6 +203,21 @@ void GenMotherParticleSkimmer::produce(edm::Event& iEvent, const edm::EventSetup
 	//------------------------------------------------------------------------
 
 	outputGenParticles -> push_back ( *it );
+
+	//------------------------------------------------------------------------
+	// DEBUG: print mother chain
+	//------------------------------------------------------------------------
+	
+	/*
+	//int nMothersInChain = motherChain.size();
+	if ( nMothersInChain != 0 ) { 
+	std::cout << "DEBUG2:: Particle ID = " << pdgid << ", mother chain = ";
+	for (int iMother = 0; iMother < nMothersInChain; ++iMother) { 
+	std::cout << motherChain[iMother] << " ";
+	}
+	std::cout << std::endl;
+	}
+	*/
 	  
       }
     }
