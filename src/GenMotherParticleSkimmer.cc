@@ -153,8 +153,13 @@ void GenMotherParticleSkimmer::produce(edm::Event& iEvent, const edm::EventSetup
 	  
 	  foundInterestingMother = interesting_mother_iterator != m_motherPDGIds.end();
 	  
-	  // Is the mother of this particle in the list of mothers we want to veto?
 
+	  //break the while loop for 'tries' if m_motherPDGId.size()==1 and it is already found.
+
+          if( m_motherPDGIds.size()==1 && foundInterestingMother ) numberOfTries=maxNumberOfTries;
+
+
+	  // Is the mother of this particle in the list of mothers we want to veto?
 	  
 	  std::vector<int>::const_iterator vetoed_mother_iterator = std::find ( m_motherPDGIdsVetoed.begin(),
 										m_motherPDGIdsVetoed.end(),
