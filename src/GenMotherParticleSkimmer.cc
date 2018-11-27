@@ -55,7 +55,7 @@ GenMotherParticleSkimmer::~GenMotherParticleSkimmer() {}
 
 void GenMotherParticleSkimmer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   
-  std::auto_ptr<reco::GenParticleCollection> outputGenParticles ( new reco::GenParticleCollection());
+  std::unique_ptr<reco::GenParticleCollection> outputGenParticles ( new reco::GenParticleCollection());
   
   if( !iEvent.isRealData() ) {
     edm::Handle<reco::GenParticleCollection> inputGenParticles;
@@ -228,7 +228,7 @@ void GenMotherParticleSkimmer::produce(edm::Event& iEvent, const edm::EventSetup
     }
   }
 
-  iEvent.put ( outputGenParticles );
+  iEvent.put(std::move(outputGenParticles));
   
 }
 
